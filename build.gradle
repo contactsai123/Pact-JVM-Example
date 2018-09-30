@@ -1,0 +1,86 @@
+buildscript {
+	ext {
+        springBootVersion = '1.5.9.RELEASE'
+    }
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+       classpath 'au.com.dius:pact-jvm-provider-gradle_2.12:3.5.22'
+	    classpath(
+          "org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+		
+    }
+}
+
+
+repositories {
+	mavenCentral()
+}
+
+apply plugin: 'java'
+apply plugin: 'maven'
+apply plugin: 'eclipse'
+apply plugin: 'au.com.dius.pact'
+apply plugin: 'org.springframework.boot'
+
+
+group = 'com.pact.test'
+
+description = "PACT_JVM"
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+dependencies {
+    testCompile group: 'org.apache.httpcomponents', name: 'fluent-hc', version:'4.5.1'
+    testCompile group: 'org.json', name: 'json', version:'20171018'
+    testCompile group: 'junit', name: 'junit', version:'4.12'
+    testCompile group: 'au.com.dius', name: 'pact-jvm-consumer-junit_2.12', version:'3.5.22'	
+    testCompile group: 'au.com.dius', name: 'pact-jvm-provider_2.12', version: '3.5.22'
+   	testCompile group: 'com.jayway.restassured', name: 'rest-assured', version: '2.9.0'
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-web', version:'1.5.9.RELEASE'
+    testCompile(group: 'org.springframework.boot', name: 'spring-boot-starter-test', version:'1.5.9.RELEASE') {
+	exclude(module: 'commons-logging')
+	}
+   
+}
+
+pact {
+	
+	//Run pactPublish task IF you need to publish the Pact files to the broker. Provide the pactUrl, pactUser, pactPassword in Gradle.properties file
+	publish {
+	version = "2.0.1"
+	pactDirectory = 'pacts' // defaults to $buildDir/pacts
+		  pactBrokerUrl = pactUrl
+		  pactBrokerUsername = pactUser
+		  pactBrokerPassword = pactPassword
+  }
+  
+      serviceProviders {  
+        // You can define as many as you need, but each must have a unique name
+        UserService {
+            // All the provider properties are optional, and have sensible defaults (shown below)
+            protocol = 'http'
+            host = 'localhost'
+            port = 8111
+            project.version = "2.0.1"
+			
+			//Verifying pact from Local. Comment the below lines and uncomment hasPactsFromPactBroker if you need to verify results from broker
+			hasPactsWith('consumers') {
+                pactFileLocation = file('pacts') 
+			}
+			
+			//Run pactVerify task if you need to send the verification results back to PactBroker. Provide the pactUrl, pactUser, pactPassword in Gradle.properties file
+			//You need to publish Pact to broker first by running pactPublish command
+			
+			//hasPactsFromPactBroker(pactUrl, authentication: ['Basic', pactUser, pactPassword])
+				}
+        }            
+      
+    reports {
+      defaultReports() // adds the standard console output
+      markdown // report in markdown format
+      json // report in json format
+   }
+}

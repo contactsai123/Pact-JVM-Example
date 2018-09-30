@@ -1,0 +1,156 @@
+{
+    "metaData": {
+        "date": "2018-09-30T06:14:18+0000",
+        "pactJvmVersion": "3.5.22",
+        "reportFormat": "0.0.0"
+    },
+    "provider": {
+        "name": "UserService"
+    },
+    "execution": [
+        {
+            "consumer": {
+                "name": "ConsumerA",
+                "source": {
+                    "file": {
+                        "directory": false,
+                        "file": true,
+                        "freeSpace": 30846226432,
+                        "invalid": false,
+                        "canonicalPath": "C:\\Sai\\QE\\Automation\\Pact-JVM\\pacts\\ConsumerA-UserService.json",
+                        "usableSpace": 30846226432,
+                        "hidden": false,
+                        "totalSpace": 242708639744,
+                        "path": "C:\\Sai\\QE\\Automation\\Pact-JVM\\pacts\\ConsumerA-UserService.json",
+                        "name": "ConsumerA-UserService.json",
+                        "prefixLength": 3,
+                        "absolute": true,
+                        "absolutePath": "C:\\Sai\\QE\\Automation\\Pact-JVM\\pacts\\ConsumerA-UserService.json",
+                        "parent": "C:\\Sai\\QE\\Automation\\Pact-JVM\\pacts"
+                    }
+                }
+            },
+            "interactions": [
+                {
+                    "interaction": {
+                        "description": "A request for age for emp id 214",
+                        "request": {
+                            "method": "GET",
+                            "path": "/user/Peter/214"
+                        },
+                        "response": {
+                            "status": 200,
+                            "headers": {
+                                "Content-Type": "application/json"
+                            },
+                            "body": {
+                                "empid": "214",
+                                "age": 30
+                            },
+                            "matchingRules": {
+                                "body": {
+                                    "$.empid": {
+                                        "matchers": [
+                                            {
+                                                "match": "type"
+                                            }
+                                        ],
+                                        "combine": "AND"
+                                    },
+                                    "$.age": {
+                                        "matchers": [
+                                            {
+                                                "match": "integer"
+                                            }
+                                        ],
+                                        "combine": "AND"
+                                    }
+                                }
+                            }
+                        },
+                        "providerStates": [
+                            {
+                                "name": "There is a user with empid 214 available in the Consumer A system"
+                            }
+                        ]
+                    },
+                    "verification": {
+                        "result": "OK"
+                    }
+                }
+            ]
+        },
+        {
+            "consumer": {
+                "name": "ConsumerB",
+                "source": {
+                    "file": {
+                        "directory": false,
+                        "file": true,
+                        "freeSpace": 30846226432,
+                        "invalid": false,
+                        "canonicalPath": "C:\\Sai\\QE\\Automation\\Pact-JVM\\pacts\\ConsumerB-UserService.json",
+                        "usableSpace": 30846226432,
+                        "hidden": false,
+                        "totalSpace": 242708639744,
+                        "path": "C:\\Sai\\QE\\Automation\\Pact-JVM\\pacts\\ConsumerB-UserService.json",
+                        "name": "ConsumerB-UserService.json",
+                        "prefixLength": 3,
+                        "absolute": true,
+                        "absolutePath": "C:\\Sai\\QE\\Automation\\Pact-JVM\\pacts\\ConsumerB-UserService.json",
+                        "parent": "C:\\Sai\\QE\\Automation\\Pact-JVM\\pacts"
+                    }
+                }
+            },
+            "interactions": [
+                {
+                    "interaction": {
+                        "description": "A request for name for emp id 214",
+                        "request": {
+                            "method": "GET",
+                            "path": "/user/Peter/214"
+                        },
+                        "response": {
+                            "status": 200,
+                            "headers": {
+                                "Content-Type": "application/json"
+                            },
+                            "body": {
+                                "empid": "214",
+                                "name": "Peter"
+                            },
+                            "matchingRules": {
+                                "body": {
+                                    "$.name": {
+                                        "matchers": [
+                                            {
+                                                "match": "type"
+                                            }
+                                        ],
+                                        "combine": "AND"
+                                    },
+                                    "$.empid": {
+                                        "matchers": [
+                                            {
+                                                "match": "type"
+                                            }
+                                        ],
+                                        "combine": "AND"
+                                    }
+                                }
+                            }
+                        },
+                        "providerStates": [
+                            {
+                                "name": "There is a user with empid 214 available in the Consumer B system"
+                            }
+                        ]
+                    },
+                    "verification": {
+                        "result": "OK"
+                    }
+                }
+            ]
+        }
+    ]
+}
