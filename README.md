@@ -13,8 +13,6 @@ I have 1 provider called "UserService" in src/main and 2 consumers "Consumer A" 
 
 * Clone the project in your local
 
-
-
 **1) How to run Provider:**
 * First build the project and download dependenices ./gradlew clean build -xtest
 * Run the gradle command ./gradlew bootRun
