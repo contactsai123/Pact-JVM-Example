@@ -61,12 +61,6 @@ spec:
     def shortGitCommit = "${gitCommit[0..10]}"
     def previousGitCommit = sh(script: "git rev-parse ${gitCommit}~", returnStdout: true)
  
-    stage('Run kubectl') {
-      container('kubectl') {
-        sh "kubectl get pods"
-      }
-    }
-  
     stage('Checkout') {
       git 'https://github.com/carlossg/selenium-example.git'
       parallel (
