@@ -36,7 +36,8 @@ volumes: [
     }
     stage('Build') {
       container('gradle') {
-        sh "gradle build"
+      chmod +x gradlew
+        sh "./gradlew build"
       }
     }
     stage('Create Docker images') {
