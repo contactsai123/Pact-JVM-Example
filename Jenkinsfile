@@ -17,7 +17,7 @@ volumes: [
     def shortGitCommit = "${gitCommit[0..10]}"
     def previousGitCommit = sh(script: "git rev-parse ${gitCommit}~", returnStdout: true)
  
-    stage('Test') {
+  /*  stage('Test') {
       try {
         container('gradle') {
           sh """
@@ -33,9 +33,11 @@ volumes: [
         println "Failed to test - ${currentBuild.fullDisplayName}"
         throw(exc)
       }
-    }
+    } */
+    
     stage('Build') {
       container('gradle') {
+        sh "chmod +x gradlew"
         sh "./gradlew build"
       }
     }
