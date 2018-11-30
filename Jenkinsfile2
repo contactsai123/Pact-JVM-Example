@@ -9,7 +9,48 @@ podTemplate(label: label, containers: [
 volumes: [
   hostPathVolume(mountPath: '/home/gradle/.gradle', hostPath: '/tmp/jenkins/.gradle'),
   hostPathVolume(mountPath: '/var/run/docker.sock', hostPath: '/var/run/docker.sock')
-]) {
+]) 
+podTemplate(label: label, yaml: """
+apiVersion: v1
+kind: Pod
+spec:
+  containers:
+  - name: maven-firefox
+    image: maven:3.3.9-jdk-8-alpine
+    command: ['cat']
+    tty: true
+  - name: maven-chrome
+    image: maven:3.3.9-jdk-8-alpine
+    command: ['cat']
+    tty: true
+  - name: selenium-hub
+    image: selenium/hub:3.4.0
+  - name: selenium-chrome
+    image: selenium/node-chrome:3.4.0
+    env:
+    - name: HUB_PORT_4444_TCP_ADDR
+      value: localhost
+    - name: HUB_PORT_4444_TCP_PORT
+      value: 4444
+    - name: DISPLAY
+      value: :99.0
+    - name: SE_OPTS
+      value: -port 5556
+  - name: selenium-firefox
+    image: selenium/node-firefox:3.4.0
+    env:
+    - name: HUB_PORT_4444_TCP_ADDR
+      value: localhost
+    - name: HUB_PORT_4444_TCP_PORT
+      value: 4444
+    - name: DISPLAY
+      value: :98.0
+    - name: SE_OPTS
+      value: -port 5557
+"""
+  ) 
+
+{
   node(label) {
     def myRepo = checkout scm
     def gitCommit = myRepo.GIT_COMMIT
