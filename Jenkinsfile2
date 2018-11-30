@@ -32,7 +32,7 @@ volumes: [
             echo "Inside Gradle container!"
             sh "whoami"
             sh "chmod +x gradlew"
-           // sh "./gradlew build -xtest"
+            sh "./gradlew build -xtest"
            // """
         }
       }
@@ -41,18 +41,20 @@ volumes: [
         throw(exc)
       }
     }
-    stage('Test Project') {
+    stage('Contract Test') {
       container('gradle') {
       sh "chmod +x gradlew"
-      sh "./gradlew test pactPublish pactVerify"
+      sh "./gradlew test pactPublish"
+      sh "./gradlew pactVerify"
       }
     }
+    
     stage('Create Docker images') {
       container('docker') {
         withCredentials([[$class: 'UsernamePasswordMultiBinding',
           credentialsId: 'dockerhub',
-          usernameVariable: 'DOCKER_HUB_USER',
-          passwordVariable: 'DOCKER_HUB_PASSWORD']]) {
+          usernameVariable: 'contactsai123',
+          passwordVariable: 'p@ssword123']]) {
           sh """
             docker login -u ${DOCKER_HUB_USER} -p ${DOCKER_HUB_PASSWORD}
             docker build -t namespace/my-image:${gitCommit} .
