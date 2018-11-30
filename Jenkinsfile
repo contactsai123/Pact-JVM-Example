@@ -14,6 +14,10 @@ spec:
     image: maven:3.3.9-jdk-8-alpine
     command: ['cat']
     tty: true
+  - name: kubectl
+    image: lachlanevenson/k8s-kubectl:v1.8.8
+    command: ['cat']
+    tty: true
   - name: maven-chrome
     image: maven:3.3.9-jdk-8-alpine
     command: ['cat']
@@ -46,6 +50,14 @@ spec:
   ) {
 
   node(label) {
+  
+   
+    stage('Run kubectl') {
+      container('kubectl') {
+        sh "kubectl get pods"
+      }
+    }
+	
     stage('Checkout') {
       git 'https://github.com/carlossg/selenium-example.git'
       parallel (
