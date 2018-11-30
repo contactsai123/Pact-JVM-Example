@@ -20,7 +20,7 @@ volumes: [
     stage('Test') {
       try {
         container('gradle') {
-          sh """
+          sudo sh """
             pwd
             echo "GIT_BRANCH=${gitBranch}" >> /etc/environment
             echo "GIT_COMMIT=${gitCommit}" >> /etc/environment
