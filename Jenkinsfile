@@ -5,11 +5,11 @@ apiVersion: v1
 kind: Pod
 spec:
   containers:
- - name: gradle
+  - name: gradle
     image: gradle:4.5.1-jdk9
     command: ['cat']
     tty: true
- - name: kubectl
+  - name: kubectl
     image: lachlanevenson/k8s-kubectl:v1.8.8
     command: ['cat']
     tty: true
