@@ -28,7 +28,7 @@ volumes: [
     stage('Test') {
       try {
         container('gradle') {
-         // sudo sh """
+         sh "-u root"
             //sh pwd
             echo "Inside Gradle container!"
             sh "whoami"
