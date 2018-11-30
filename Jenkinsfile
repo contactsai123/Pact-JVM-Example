@@ -21,10 +21,11 @@ volumes: [
       try {
         container('gradle') {
           sh """
-            pwd
+            //pwd
             echo "GIT_BRANCH=${gitBranch}" >> /etc/environment
             echo "GIT_COMMIT=${gitCommit}" >> /etc/environment
-            gradle test
+            chmod +x gradlew
+           ./gradlew test
             """
         }
       }
@@ -35,7 +36,7 @@ volumes: [
     }
     stage('Build') {
       container('gradle') {
-        sh "gradle build"
+        sh "./gradlew build"
       }
     }
     stage('Create Docker images') {
@@ -45,7 +46,8 @@ volumes: [
           usernameVariable: 'DOCKER_HUB_USER',
           passwordVariable: 'DOCKER_HUB_PASSWORD']]) {
           sh """
-            docker login -u ${DOCKER_HUB_USER} -p ${DOCKER_HUB_PASSWORD}
+           // docker login -u ${DOCKER_HUB_USER} -p ${DOCKER_HUB_PASSWORD
+           docker login -u contactsai123 -p p@ssword123
             docker build -t namespace/my-image:${gitCommit} .
             docker push namespace/my-image:${gitCommit}
             """
