@@ -34,7 +34,6 @@ spec:
 	  
     stage('Print Gradle') {
       container('gradle') {
-	      sudo mount -o remount,exec /var
 	sh "Let me know who am I?"
 	sh "whoami"
         sh "echo Hi"
