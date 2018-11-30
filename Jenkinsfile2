@@ -31,8 +31,6 @@ volumes: [
             sh "pwd"
             echo "Inside Gradle container!"
             sh "whoami"
-            echo "GIT_BRANCH=${gitBranch}" >> /etc/environment
-            echo "GIT_COMMIT=${gitCommit}" >> /etc/environment
             sh "chmod +x gradlew"
             sh "./gradlew build -xtest"
            // """
