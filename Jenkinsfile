@@ -35,7 +35,7 @@ volumes: [
       }
     } */
     
-    stage('Build') {
+  /*  stage('Build') {
       container('gradle') {
         sh "chmod +x gradlew"
         sh "./gradlew build"
@@ -56,7 +56,8 @@ volumes: [
         //    """
         }
       }
-    }
+    } */
+    
     stage('Run kubectl') {
       container('kubectl') {
         sh "kubectl get pods"
