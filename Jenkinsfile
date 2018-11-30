@@ -30,6 +30,12 @@ spec:
         sh "kubectl get pods"
       }
     }
+	  
+    stage('Print Gradle') {
+      container('gradle') {
+        sh "gradle --version"
+      }
+    }
 	
 	stage('Dev code Checkout') {
       git 'https://github.com/contactsai123/PACT-JVM-Example.git'
@@ -37,14 +43,16 @@ spec:
         buildrepo: {
           container('gradle') {
             stage('Build repo') {
-              sh 'chmod +x gradlew;./gradlew clean build -xtest'
+              sh "chmod +x gradlew"
+	      sh "./gradlew clean build -xtest"
             }
           }
         },
         testrepo: {
           container('gradle') {
             stage('Test repo') {
-              sh 'chmod +x gradlew;./gradlew clean build -xtest'
+                sh "chmod +x gradlew"
+		sh "./gradlew test"
             }
           }
         }
