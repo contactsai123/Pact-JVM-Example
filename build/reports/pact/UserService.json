@@ -1,6 +1,6 @@
 {
     "metaData": {
-        "date": "2018-11-30T16:57:12+0000",
+        "date": "2018-11-30T17:05:28+0000",
         "pactJvmVersion": "3.5.22",
         "reportFormat": "0.0.0"
     },
@@ -123,7 +123,7 @@
                                 "$": [
                                     {
                                         "mismatch": "Expected name='Peter' but was missing",
-                                        "diff": "{\n+    \"legalname\": \"Peter\",\n    \"empid\": \"214\",\n-    \"name\": \"Peter\"\n+    \"age\": 30,\n+    \"salary\": 53609\n}"
+                                        "diff": "{\n+    \"legalname\": \"Peter\",\n    \"empid\": \"214\",\n-    \"name\": \"Peter\"\n+    \"age\": 30,\n+    \"salary\": 65554\n}"
                                     }
                                 ]
                             },
@@ -133,7 +133,7 @@
                                 "    \"empid\": \"214\",",
                                 "-    \"name\": \"Peter\"",
                                 "+    \"age\": 30,",
-                                "+    \"salary\": 53609",
+                                "+    \"salary\": 65554",
                                 "}"
                             ]
                         }
