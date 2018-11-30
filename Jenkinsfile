@@ -49,7 +49,7 @@ volumes: [
            // docker login -u ${DOCKER_HUB_USER} -p ${DOCKER_HUB_PASSWORD
            docker login -u "contactsai123" -p "p@ssword123"
             //docker build -t namespace/my-image:${gitCommit} .
-          docker push build/libs/Pact-JVM-2.0.1.jar
+          //docker push build/libs/Pact-JVM.jar
            // docker push namespace/my-image:${gitCommit}
             """
         }
