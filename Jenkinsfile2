@@ -23,7 +23,7 @@ volumes: [
          // sudo sh """
             //sh pwd
             echo "Inside Gradle container!"
-            whoami
+            sh "whoami"
             //echo "GIT_BRANCH=${gitBranch}" >> /etc/environment
             //echo "GIT_COMMIT=${gitCommit}" >> /etc/environment
             //gradle test
