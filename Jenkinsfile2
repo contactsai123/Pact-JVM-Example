@@ -28,7 +28,7 @@ volumes: [
     stage('Build Project') {
       try {
         container('gradle') {
-            sh pwd
+            sh "pwd"
             echo "Inside Gradle container!"
             sh "whoami"
             echo "GIT_BRANCH=${gitBranch}" >> /etc/environment
