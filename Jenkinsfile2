@@ -44,7 +44,7 @@ volumes: [
     stage('Test Project') {
       container('gradle') {
       sh "chmod +x gradlew"
-      sh "./gradlew test pactPublish pactVeify"
+      sh "./gradlew test pactPublish pactVerify"
       }
     }
     stage('Create Docker images') {
