@@ -36,7 +36,7 @@ volumes: [
     }
     stage('Build') {
       container('gradle') {
-      chmod +x gradlew
+      sh "chmod +x gradlew"
         sh "./gradlew build"
       }
     }
