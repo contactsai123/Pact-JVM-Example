@@ -25,16 +25,16 @@ volumes: [
         sh "kubectl get pods"
       }
     }
-    stage('Test') {
+    stage('Build Project') {
       try {
         container('gradle') {
-            //sh pwd
+            sh pwd
             echo "Inside Gradle container!"
             sh "whoami"
-            // echo whoami
-            //echo "GIT_BRANCH=${gitBranch}" >> /etc/environment
-            //echo "GIT_COMMIT=${gitCommit}" >> /etc/environment
-            //gradle test
+            echo "GIT_BRANCH=${gitBranch}" >> /etc/environment
+            echo "GIT_COMMIT=${gitCommit}" >> /etc/environment
+            sh "chmod +x gradlew"
+            sh "./gradlew build -xtest"
            // """
         }
       }
@@ -43,10 +43,10 @@ volumes: [
         throw(exc)
       }
     }
-    stage('Build') {
+    stage('Test Project') {
       container('gradle') {
       sh "chmod +x gradlew"
-        sh "./gradlew build"
+        sh "./gradlew test pactPublish pactVeify"
       }
     }
     stage('Create Docker images') {
