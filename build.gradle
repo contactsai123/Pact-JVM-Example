@@ -1,13 +1,13 @@
 buildscript {
 	ext {
-        springBootVersion = '1.5.9.RELEASE'
-    }
+        springBootVersion = '1.5.9.RELEASE'    }
     repositories {
         mavenCentral()
     }
     dependencies {
        classpath 'au.com.dius:pact-jvm-provider-gradle_2.12:3.5.22'
-	    classpath(
+	   classpath('se.transmode.gradle:gradle-docker:1.2')
+	   classpath(
           "org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
 		
     }
@@ -23,14 +23,17 @@ apply plugin: 'maven'
 apply plugin: 'eclipse'
 apply plugin: 'au.com.dius.pact'
 apply plugin: 'org.springframework.boot'
+apply plugin: 'docker'
 
 
 group = 'com.pact.test'
 
 description = "PACT_JVM"
 
+compileJava {
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
+	}
 
 dependencies {
     testCompile group: 'org.apache.httpcomponents', name: 'fluent-hc', version:'4.5.1'
@@ -46,6 +49,24 @@ dependencies {
    
 }
 
+jar {
+	baseName = "PACT-JVM"
+	group    = "com.pact.contract"
+	version  = "1.0.0"
+	manifest { attributes "Main-Class": "com.pact.producer.UsrApplication" }
+}
+
+task buildDocker(type: Docker, dependsOn: build) {
+	applicationName = jar.baseName
+	dockerfile = file('src/main/resources/Dockerfile')
+	doFirst {
+	  copy {
+		from jar
+		into stageDir
+	  }
+	}
+  }
+  
 pact {
 	
 	//Run pactPublish task IF you need to publish the Pact files to the broker. Provide the pactUrl, pactUser, pactPassword in Gradle.properties file
@@ -67,14 +88,14 @@ pact {
             project.version = "2.0.1"
 			
 			//Verifying pact from Local. Comment the below lines and uncomment hasPactsFromPactBroker if you need to verify results from broker
-			hasPactsWith('consumers') {
-                pactFileLocation = file('pacts') 
-			}
+			//hasPactsWith('consumers') {
+               // pactFileLocation = file('pacts') 
+			//}
 			
 			//Run pactVerify task if you need to send the verification results back to PactBroker. Provide the pactUrl, pactUser, pactPassword in Gradle.properties file
 			//You need to publish Pact to broker first by running pactPublish command
 			
-			//hasPactsFromPactBroker(pactUrl, authentication: ['Basic', pactUser, pactPassword])
+			hasPactsFromPactBroker(pactUrl, authentication: ['Basic', pactUser, pactPassword])
 				}
         }            
       

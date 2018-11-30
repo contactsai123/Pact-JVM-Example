@@ -1,0 +1,60 @@
+{
+    "provider": {
+        "name": "UserService"
+    },
+    "consumer": {
+        "name": "ConsumerA"
+    },
+    "interactions": [
+        {
+            "description": "A request for age for emp id 214",
+            "request": {
+                "method": "GET",
+                "path": "/user/Peter/214"
+            },
+            "response": {
+                "status": 200,
+                "headers": {
+                    "Content-Type": "application/json"
+                },
+                "body": {
+                    "empid": "214",
+                    "age": 30
+                },
+                "matchingRules": {
+                    "body": {
+                        "$.empid": {
+                            "matchers": [
+                                {
+                                    "match": "type"
+                                }
+                            ],
+                            "combine": "AND"
+                        },
+                        "$.age": {
+                            "matchers": [
+                                {
+                                    "match": "integer"
+                                }
+                            ],
+                            "combine": "AND"
+                        }
+                    }
+                }
+            },
+            "providerStates": [
+                {
+                    "name": "There is a user with empid 214 available in the Consumer A system"
+                }
+            ]
+        }
+    ],
+    "metadata": {
+        "pactSpecification": {
+            "version": "3.0.0"
+        },
+        "pact-jvm": {
+            "version": "3.5.22"
+        }
+    }
+}

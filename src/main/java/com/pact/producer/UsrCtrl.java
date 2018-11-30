@@ -9,17 +9,15 @@ import java.util.Random;
 @RestController
 public class UsrCtrl {
 
-
-
-    @RequestMapping("/user/{name}/{empid}")
-    public UsrInfo bus(@PathVariable String name, @PathVariable String empid) {
-        int salary = getEtaBasedOnGpsAndOtherAdcancedStuff();
+    @RequestMapping("/user/{legalname}/{empid}")
+    public UsrInfo bus(@PathVariable String legalname, @PathVariable String empid) {
+        int salary = getSalary();
         int age = 30;
-        UsrInfo b = new UsrInfo(name, empid, age, salary);
+        UsrInfo b = new UsrInfo(legalname, empid, age, salary);
         return b;
     }
 
-    private int getEtaBasedOnGpsAndOtherAdcancedStuff() {
+    private int getSalary() {
         Random rn = new Random();
         int min = 50000;
         int max = 70000;

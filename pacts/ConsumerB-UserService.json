@@ -1,0 +1,60 @@
+{
+    "provider": {
+        "name": "UserService"
+    },
+    "consumer": {
+        "name": "ConsumerB"
+    },
+    "interactions": [
+        {
+            "description": "A request for name for emp id 214",
+            "request": {
+                "method": "GET",
+                "path": "/user/Peter/214"
+            },
+            "response": {
+                "status": 200,
+                "headers": {
+                    "Content-Type": "application/json"
+                },
+                "body": {
+                    "empid": "214",
+                    "name": "Peter"
+                },
+                "matchingRules": {
+                    "body": {
+                        "$.name": {
+                            "matchers": [
+                                {
+                                    "match": "type"
+                                }
+                            ],
+                            "combine": "AND"
+                        },
+                        "$.empid": {
+                            "matchers": [
+                                {
+                                    "match": "type"
+                                }
+                            ],
+                            "combine": "AND"
+                        }
+                    }
+                }
+            },
+            "providerStates": [
+                {
+                    "name": "There is a user with empid 214 available in the Consumer B system"
+                }
+            ]
+        }
+    ],
+    "metadata": {
+        "pactSpecification": {
+            "version": "3.0.0"
+        },
+        "pact-jvm": {
+            "version": "3.5.22"
+        }
+    }
+}
