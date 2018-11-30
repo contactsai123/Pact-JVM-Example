@@ -16,14 +16,22 @@ volumes: [
     def gitBranch = myRepo.GIT_BRANCH
     def shortGitCommit = "${gitCommit[0..10]}"
     def previousGitCommit = sh(script: "git rev-parse ${gitCommit}~", returnStdout: true)
+    echo whoami
  
+     stage('Run kubectl') {
+      container('kubectl') {
+        echo "Inside kubectl user!"
+        sh "whoami"
+        sh "kubectl get pods"
+      }
+    }
     stage('Test') {
       try {
         container('gradle') {
          // sudo sh """
             //sh pwd
             echo "Inside Gradle container!"
-            echo whoami
+            // echo whoami
             //echo "GIT_BRANCH=${gitBranch}" >> /etc/environment
             //echo "GIT_COMMIT=${gitCommit}" >> /etc/environment
             //gradle test
@@ -55,11 +63,7 @@ volumes: [
         }
       }
     }
-    stage('Run kubectl') {
-      container('kubectl') {
-        sh "kubectl get pods"
-      }
-    }
+
     stage('Run helm') {
       container('helm') {
         sh "helm list"
