@@ -55,17 +55,11 @@ spec:
       value: :98.0
     - name: SE_OPTS
       value: -port 5557
-  volumes:
-  - name: gradlevolume
-    emptyDir: {}
-    mountPath: '/home/gradle/.gradle'
-    hostPath: '/tmp/jenkins/.gradle'
-  - name: dockervolume
-    emptyDir: {}
-    mountPath: '/var/run/docker.sock'
-    hostPath: '/var/run/docker.sock'
-"""
-  ) {
+""",
+volumes: [
+  hostPathVolume(mountPath: '/home/gradle/.gradle', hostPath: '/tmp/jenkins/.gradle'),
+  hostPathVolume(mountPath: '/var/run/docker.sock', hostPath: '/var/run/docker.sock')
+] ) {
 
   node(label) {
   
@@ -145,4 +139,5 @@ spec:
       containerLog('selenium-firefox')
     }
   }
+}
 }
