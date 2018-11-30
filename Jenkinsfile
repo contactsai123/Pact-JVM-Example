@@ -54,12 +54,6 @@ spec:
   ) {
 
   node(label) {
-    
-    stage('Run kubectl') {
-      container('kubectl') {
-        sh "kubectl get pods"
-      }
-    }
  
     stage('Checkout') {
       git 'https://github.com/carlossg/selenium-example.git'
