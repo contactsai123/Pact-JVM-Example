@@ -24,6 +24,7 @@ spec:
 
   node(label) {
   
+	  
    
     stage('Run kubectl') {
       container('kubectl') {
@@ -33,6 +34,10 @@ spec:
 	  
     stage('Print Gradle') {
       container('gradle') {
+	sh "Let me know who am I?"
+	sh "whoami"
+        sh "echo Hi"
+        sh "dpkg -l"
 	sh "chmod +x gradlew"
 	echo "permission given!"
         sh "./gradlew --version"
