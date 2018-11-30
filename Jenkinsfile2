@@ -33,7 +33,7 @@ volumes: [
             sh "whoami"
             sh "chmod +x gradlew"
             sh "./gradlew build -xtest"
-            sh "./gradlew bootRun"
+           // sh "./gradlew bootRun"
            // """
         }
       }
