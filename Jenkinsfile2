@@ -20,13 +20,13 @@ volumes: [
     stage('Test') {
       try {
         container('gradle') {
-          sudo sh """
-            pwd
+         // sudo sh """
+            //sh pwd
             echo "Inside Gradle container!"
             //echo "GIT_BRANCH=${gitBranch}" >> /etc/environment
             //echo "GIT_COMMIT=${gitCommit}" >> /etc/environment
             //gradle test
-            """
+           // """
         }
       }
       catch (exc) {
