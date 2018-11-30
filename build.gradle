@@ -95,7 +95,7 @@ pact {
 			//Run pactVerify task if you need to send the verification results back to PactBroker. Provide the pactUrl, pactUser, pactPassword in Gradle.properties file
 			//You need to publish Pact to broker first by running pactPublish command
 			
-			hasPactsFromPactBroker(pactUrl, authentication: ['Basic','ZVPfu3GzqtwqrNZTrcSTjEeTcbcgZen', 'gOFZjnwvNoHtZdzKW06UgX9yFA5Z7Qk'])
+			hasPactsFromPactBroker('https://sivasailem.pact.dius.com.au', authentication: ['Basic','ZVPfu3GzqtwqrNZTrcSTjEeTcbcgZen', 'gOFZjnwvNoHtZdzKW06UgX9yFA5Z7Qk'])
 				}
         }            
       
