@@ -10,14 +10,6 @@ apiVersion: v1
 kind: Pod
 spec:
   containers:
-  - name: gradle
-    image: gradle:4.5.1-jdk9
-    command: ['cat']
-    tty: true
-  - name: kubectl
-    image: lachlanevenson/k8s-kubectl:v1.8.8
-    command: ['cat']
-    tty: true
   - name: maven-firefox
     image: maven:3.3.9-jdk-8-alpine
     command: ['cat']
@@ -54,7 +46,6 @@ spec:
   ) {
 
   node(label) {
- 
     stage('Checkout') {
       git 'https://github.com/carlossg/selenium-example.git'
       parallel (
