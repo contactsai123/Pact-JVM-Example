@@ -33,7 +33,9 @@ spec:
 	  
     stage('Print Gradle') {
       container('gradle') {
-        sh "gradle --version"
+	sh "chmod +x gradlew"
+	echo "permission given!"
+        sh "./gradlew --version"
       }
     }
 	
