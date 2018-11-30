@@ -10,42 +10,14 @@ apiVersion: v1
 kind: Pod
 spec:
   containers:
-  - name: maven-firefox
-    image: maven:3.3.9-jdk-8-alpine
+  - name: gradle
+    image: gradle:4.5.1-jdk9
     command: ['cat']
     tty: true
   - name: kubectl
     image: lachlanevenson/k8s-kubectl:v1.8.8
     command: ['cat']
     tty: true
-  - name: maven-chrome
-    image: maven:3.3.9-jdk-8-alpine
-    command: ['cat']
-    tty: true
-  - name: selenium-hub
-    image: selenium/hub:3.4.0
-  - name: selenium-chrome
-    image: selenium/node-chrome:3.4.0
-    env:
-    - name: HUB_PORT_4444_TCP_ADDR
-      value: localhost
-    - name: HUB_PORT_4444_TCP_PORT
-      value: 4444
-    - name: DISPLAY
-      value: :99.0
-    - name: SE_OPTS
-      value: -port 5556
-  - name: selenium-firefox
-    image: selenium/node-firefox:3.4.0
-    env:
-    - name: HUB_PORT_4444_TCP_ADDR
-      value: localhost
-    - name: HUB_PORT_4444_TCP_PORT
-      value: 4444
-    - name: DISPLAY
-      value: :98.0
-    - name: SE_OPTS
-      value: -port 5557
 """
   ) {
 
@@ -58,29 +30,29 @@ spec:
       }
     }
 	
-    stage('Checkout') {
-      git 'https://github.com/carlossg/selenium-example.git'
+	stage('Dev code Checkout') {
+      git 'https://github.com/contactsai123/PACT-JVM-Example.git'
       parallel (
-        firefox: {
-          container('maven-firefox') {
-            stage('Test firefox') {
-              sh 'mvn -B clean test -Dselenium.browser=firefox -Dsurefire.rerunFailingTestsCount=5 -Dsleep=0'
+        buildrepo: {
+          container('gradle') {
+            stage('Build repo') {
+              sh 'chmod +x gradlew;./gradlew clean build -xtest'
             }
           }
         },
-        chrome: {
-          container('maven-chrome') {
-            stage('Test chrome') {
-              sh 'mvn -B clean test -Dselenium.browser=chrome -Dsurefire.rerunFailingTestsCount=5 -Dsleep=0'
+        testrepo: {
+          container('gradle') {
+            stage('Test repo') {
+              sh 'chmod +x gradlew;./gradlew clean build -xtest'
             }
           }
         }
       )
     }
-
+	
     stage('Logs') {
-      containerLog('selenium-chrome')
-      containerLog('selenium-firefox')
+      containerLog('gradle')
+      containerLog('kubectl')
     }
   }
 }
