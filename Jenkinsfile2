@@ -52,12 +52,9 @@ volumes: [
     
     stage('Create Docker image') {
       container('docker') {
-        withCredentials([[$class: 'UsernamePasswordMultiBinding',
-          credentialsId: 'dockerhub',
-          usernameVariable: 'contactsai123',
-          passwordVariable: 'p@ssword123']]) {
+ {
           sh """
-            docker login -u ${DOCKER_HUB_USER} -p ${DOCKER_HUB_PASSWORD}
+            docker login -u 'contactsai123' -p 'p@ssword123'
             docker build -t contactsai123/userms .
             docker push contactsai123/userms
             """
