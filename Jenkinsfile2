@@ -52,7 +52,6 @@ volumes: [
     
     stage('Create Docker image') {
       container('docker') {
- {
           sh """
             docker login -u 'contactsai123' -p 'p@ssword123'
             docker build -t contactsai123/userms .
@@ -60,7 +59,6 @@ volumes: [
             """
         }
       }
-    }
 
     stage('Run helm') {
       container('helm') {
