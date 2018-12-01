@@ -1,14 +1,14 @@
 package com.pact.producer;
 
 public class UsrInfo {
-    String legalname;
+    String name;
     String empid;
     Integer age;
     Integer salary;
 
 
-    public UsrInfo(String legalname, String empid, Integer age, Integer salary) {
-        this.legalname=legalname;
+    public UsrInfo(String name, String empid, Integer age, Integer salary) {
+        this.name=name;
         this.empid = empid;
         this.age=age;
         this.salary = salary;
@@ -38,11 +38,11 @@ public class UsrInfo {
         this.salary = salary;
     }
 
-    public String getlegalname() {
-        return legalname;
+    public String getname() {
+        return name;
     }
 
-    public void setlegalname(String legalname) {
-        this.legalname = legalname;
+    public void setname(String name) {
+        this.name = name;
     }
 }
