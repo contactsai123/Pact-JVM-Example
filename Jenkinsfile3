@@ -94,7 +94,7 @@ volumes: [
       }
   */
   
-stage('Git checkout') { // for display purposes
+stage('Automation Test checkout') { // for display purposes
         git 'https://github.com/BushnevYuri/e2e-automation-pipeline.git'
     parallel(
     Smoke:{
@@ -131,6 +131,7 @@ stage('Git checkout') { // for display purposes
     }
     }
     }
+    )
     }
     stage('UI') {
         container('maven') {
