@@ -64,7 +64,7 @@ volumes: [
   node(label) {
   
   
-      def myRepo = checkout scm
+    def myRepo = checkout scm
     def gitCommit = myRepo.GIT_COMMIT
     def gitBranch = myRepo.GIT_BRANCH
     def shortGitCommit = "${gitCommit[0..10]}"
@@ -79,7 +79,7 @@ volumes: [
       }
     }
     
-    /*
+    
     stage('Build Project') {
       try {
         container('gradle') {
@@ -89,8 +89,7 @@ volumes: [
             sh "chmod +x gradlew"
             sh "./gradlew build -xtest"
            // sh "./gradlew bootRun"
-           // """
-        }
+            }
       }
       catch (exc) {
         println "Failed to test - ${currentBuild.fullDisplayName}"
@@ -105,7 +104,6 @@ volumes: [
       }
     }
     
-    */
     stage('Build Microservice Docker image') {
       container('docker') {
           sh """
