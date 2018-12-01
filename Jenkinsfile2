@@ -111,11 +111,13 @@ volumes: [
           sh """
             docker login -u 'contactsai123' -p 'p@ssword123'
             docker images
-            docker build -t contactsai123/userms .
+            echo "print whoami??"
+            sh "whoami"
+            sudo docker build -t contactsai123/userms .
             docker images
             //Push to Docker hub registry
-            docker push contactsai123/userms
-            docker run -p 8111:8111 contactsai123/userms
+            sudo docker push contactsai123/userms
+            sudo docker run -p 8111:8111 contactsai123/userms
             """
         }
       }
