@@ -79,7 +79,7 @@ volumes: [
       }
     }
     
-    */
+    /*
     stage('Build Project') {
       try {
         container('gradle') {
@@ -104,7 +104,8 @@ volumes: [
       sh "./gradlew pactVerify"
       }
     }
-    /*
+    
+    */
     stage('Build Microservice Docker image') {
       container('docker') {
           sh """
