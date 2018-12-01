@@ -16,7 +16,7 @@ spec:
     command: ['cat']
     tty: true
   - name: maven
-    image: markhobson/maven-chrome
+    image: docker pull zenika/alpine-maven
     command: ['cat']
     tty: true
   - name: docker
@@ -133,7 +133,8 @@ stage('Automation Test checkout') { // for display purposes
     }
     )
     }
-    stage('UI') {
+    
+    /* stage('UI') {
         container('maven') {
         try {
             sh "mvn clean verify -Dtags='type:UI'"
@@ -148,6 +149,8 @@ stage('Automation Test checkout') { // for display purposes
         }
     }
     }
+     */
+     
     stage('Results') {
         junit '**/target/failsafe-reports/*.xml'
     }
