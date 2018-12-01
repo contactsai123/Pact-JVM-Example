@@ -122,7 +122,7 @@ volumes: [
       }
   */
   
-  /*
+
     stage('Testing code Checkout') {
       git 'https://github.com/carlossg/selenium-example.git'
       parallel (
@@ -142,7 +142,7 @@ volumes: [
         }
       )
     }
-*/
+
     stage('Logs') {
       containerLog('gradle')
       containerLog('kubectl')
