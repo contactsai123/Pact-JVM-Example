@@ -104,6 +104,7 @@ volumes: [
       }
     }
     
+    /*
     stage('Build Microservice Docker image') {
       container('docker') {
           sh """
@@ -119,7 +120,7 @@ volumes: [
             """
         }
       }
-  
+  */
   
     stage('Testing code Checkout') {
       git 'https://github.com/carlossg/selenium-example.git'
