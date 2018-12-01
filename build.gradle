@@ -83,7 +83,8 @@ pact {
         UserService {
             // All the provider properties are optional, and have sensible defaults (shown below)
             protocol = 'http'
-            host = 'localhost'
+            //host = 'localhost'
+			host='a11515494f53811e8b50b066a763dec8-1560429724.us-west-2.elb.amazonaws.com'
             port = 8111
             project.version = "2.0.1"
 			
