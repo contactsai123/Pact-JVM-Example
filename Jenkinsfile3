@@ -16,7 +16,7 @@ spec:
     command: ['cat']
     tty: true
   - name: maven
-    image: zenika/alpine-maven
+    image: markhobson/maven-chrome
     command: ['cat']
     tty: true
   - name: docker
@@ -96,7 +96,8 @@ volumes: [
   
 stage('Git checkout') { // for display purposes
         git 'https://github.com/BushnevYuri/e2e-automation-pipeline.git'
-    }
+    parallel(
+    Smoke:{
     stage('Smoke') {
           container('maven') {
         try {
@@ -107,11 +108,13 @@ stage('Git checkout') { // for display purposes
             publishHTML (target: [
                     reportDir: 'target/site/serenity',
                     reportFiles: 'index.html',
-                    reportName: "Smoke tests report"
+                    reportName: "Smoke_tests_report"
             ])
         }
     }
     }
+    },
+    API:{
     stage('API') {
           container('maven') {
         try {
@@ -122,12 +125,13 @@ stage('Git checkout') { // for display purposes
             publishHTML (target: [
                     reportDir: 'target/site/serenity',
                     reportFiles: 'index.html',
-                    reportName: "API tests report"
+                    reportName: "API_tests_report"
             ])
         }
     }
     }
-    
+    }
+    }
     stage('UI') {
         container('maven') {
         try {
@@ -138,7 +142,7 @@ stage('Git checkout') { // for display purposes
             publishHTML (target: [
                     reportDir: 'target/site/serenity',
                     reportFiles: 'index.html',
-                    reportName: "UI tests report"
+                    reportName: "UI_tests_report"
             ])
         }
     }
@@ -146,9 +150,8 @@ stage('Git checkout') { // for display purposes
     stage('Results') {
         junit '**/target/failsafe-reports/*.xml'
     }
-}
-    stage('Logs') {
-      containerLog('gradle')
-      containerLog('kubectl')
+   stage('Deploy to Staging') {
+     echo "Deployment successful !"
     }
+}
   }
