@@ -16,7 +16,7 @@ spec:
     command: ['cat']
     tty: true
   - name: maven
-    image: docker pull zenika/alpine-maven
+    image: zenika/alpine-maven
     command: ['cat']
     tty: true
   - name: docker
