@@ -1,0 +1,144 @@
+
+/**
+ * This pipeline executes Selenium tests against Chrome and Firefox, all running in the same Pod but in separate containers
+ * and in parallel
+ */
+
+def label = "maven-selenium-${UUID.randomUUID().toString()}"
+
+podTemplate(label: label, yaml: """
+apiVersion: v1
+kind: Pod
+spec:
+  containers:
+  - name: gradle
+    image: keeganwitt/docker-gradle-root
+    command: ['cat']
+    tty: true
+  - name: docker
+    image: docker
+    command: ['cat']
+    tty: true
+  - name: kubectl
+    image: lachlanevenson/k8s-kubectl:v1.8.8
+    command: ['cat']
+    tty: true
+""",
+volumes: [
+  hostPathVolume(mountPath: '/home/gradle/.gradle', hostPath: '/tmp/jenkins/.gradle'),
+  hostPathVolume(mountPath: '/var/run/docker.sock', hostPath: '/var/run/docker.sock')
+] ) {
+
+  node(label) {
+  
+  
+    def myRepo = checkout scm
+    def gitCommit = myRepo.GIT_COMMIT
+    def gitBranch = myRepo.GIT_BRANCH
+    def shortGitCommit = "${gitCommit[0..10]}"
+    def previousGitCommit = sh(script: "git rev-parse ${gitCommit}~", returnStdout: true)
+    sh "whoami"
+ 
+     stage('Run kubectl') {
+      container('kubectl') {
+        echo "Inside kubectl user!"
+        sh "whoami"
+        sh "kubectl get pods"
+      }
+    }
+    
+    
+    stage('Build Project') {
+      try {
+        container('gradle') {
+            sh "pwd"
+            echo "Inside Gradle container!"
+            sh "whoami"
+            sh "chmod +x gradlew"
+            sh "./gradlew build -xtest"
+           // sh "./gradlew bootRun"
+            }
+      }
+      catch (exc) {
+        println "Failed to test - ${currentBuild.fullDisplayName}"
+        throw(exc)
+      }
+    }
+    stage('Contract Test') {
+      container('gradle') {
+      sh "chmod +x gradlew"
+      sh "./gradlew test pactPublish"
+      sh "./gradlew pactVerify"
+      }
+    }
+    
+    /*
+    stage('Build Microservice Docker image') {
+      container('docker') {
+          sh """
+            docker login -u 'contactsai123' -p 'p@ssword123'
+            docker images
+            echo "print whoami??"
+            sh "whoami"
+            sudo docker build -t contactsai123/userms .
+            docker images
+            //Push to Docker hub registry
+            sudo docker push contactsai123/userms
+            sudo docker run -p 8111:8111 contactsai123/userms
+            """
+        }
+      }
+  */
+  
+stage('Git checkout') { // for display purposes
+        git 'https://github.com/BushnevYuri/e2e-automation-pipeline.git'
+    }
+    stage('Smoke') {
+        try {
+            sh "mvn clean verify -Dtags='type:Smoke'"
+        } catch (err) {
+
+        } finally {
+            publishHTML (target: [
+                    reportDir: 'target/site/serenity',
+                    reportFiles: 'index.html',
+                    reportName: "Smoke tests report"
+            ])
+        }
+    }
+    stage('API') {
+        try {
+            sh "mvn clean verify -Dtags='type:API'"
+        } catch (err) {
+
+        } finally {
+            publishHTML (target: [
+                    reportDir: 'target/site/serenity',
+                    reportFiles: 'index.html',
+                    reportName: "API tests report"
+            ])
+        }
+    }
+    stage('UI') {
+        try {
+            sh "mvn clean verify -Dtags='type:UI'"
+        } catch (err) {
+
+        } finally {
+            publishHTML (target: [
+                    reportDir: 'target/site/serenity',
+                    reportFiles: 'index.html',
+                    reportName: "UI tests report"
+            ])
+        }
+    }
+    stage('Results') {
+        junit '**/target/failsafe-reports/*.xml'
+    }
+}
+    stage('Logs') {
+      containerLog('gradle')
+      containerLog('kubectl')
+    }
+  }
+}
