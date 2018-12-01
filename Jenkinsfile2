@@ -78,6 +78,8 @@ volumes: [
         sh "kubectl get pods"
       }
     }
+    
+    */
     stage('Build Project') {
       try {
         container('gradle') {
@@ -99,19 +101,20 @@ volumes: [
       container('gradle') {
       sh "chmod +x gradlew"
       sh "./gradlew test pactPublish"
-      //sh "./gradlew pactVerify"
+      sh "./gradlew pactVerify"
       }
     }
-    
-  //  stage('Create Docker image') {
-    //  container('docker') {
-      //    sh """
-            //docker login -u 'contactsai123' -p 'p@ssword123'
-            //docker build -t contactsai123/userms .
-            //docker push contactsai123/userms
-        //    """
-        //}
-      //}
+    /*
+    stage('Build Microservice Docker image') {
+      container('docker') {
+          sh """
+            docker login -u 'contactsai123' -p 'p@ssword123'
+            docker build -t contactsai123/userms . //Build image from Dockerfile
+            docker push contactsai123/userms //Push to Docker hub registry
+            docker run -p 8111:8111 contactsai123/userms
+            """
+        }
+      }
   
   
     stage('Testing code Checkout') {
