@@ -1,74 +1,66 @@
-/**
- * This pipeline executes Selenium tests against Chrome and Firefox, all running in the same Pod but in separate containers
- * and in parallel
- */
+def label = "worker-${UUID.randomUUID().toString()}"
 
-def label = "maven-selenium-${UUID.randomUUID().toString()}"
-
-podTemplate(label: label, yaml: """
-apiVersion: v1
-kind: Pod
-spec:
-  containers:
-  - name: gradle
-    image: gradle:4.5.1-jdk9
-    command: ['cat']
-    tty: true
-    privileged: true
-  - name: kubectl
-    image: lachlanevenson/k8s-kubectl:v1.8.8
-    command: ['cat']
-    tty: true
-"""
-  ) {
-
+podTemplate(label: label, containers: [
+  containerTemplate(name: 'gradle', image: 'keeganwitt/docker-gradle-root', command: 'cat', ttyEnabled: true),
+  containerTemplate(name: 'docker', image: 'docker', command: 'cat', ttyEnabled: true),
+  containerTemplate(name: 'kubectl', image: 'lachlanevenson/k8s-kubectl:v1.8.8', command: 'cat', ttyEnabled: true),
+  containerTemplate(name: 'helm', image: 'lachlanevenson/k8s-helm:latest', command: 'cat', ttyEnabled: true)
+],
+volumes: [
+  hostPathVolume(mountPath: '/home/gradle/.gradle', hostPath: '/tmp/jenkins/.gradle'),
+  hostPathVolume(mountPath: '/var/run/docker.sock', hostPath: '/var/run/docker.sock')
+]) 
+{
   node(label) {
-  
-	  
-   
-    stage('Run kubectl') {
+    def myRepo = checkout scm
+    def gitCommit = myRepo.GIT_COMMIT
+    def gitBranch = myRepo.GIT_BRANCH
+    def shortGitCommit = "${gitCommit[0..10]}"
+    def previousGitCommit = sh(script: "git rev-parse ${gitCommit}~", returnStdout: true)
+    sh "whoami"
+ 
+     stage('Run kubectl') {
       container('kubectl') {
+        echo "Inside kubectl user!"
+        sh "whoami"
         sh "kubectl get pods"
       }
     }
-	  
-    stage('Print Gradle') {
-      container('gradle') {
-	sh "Let me know who am I?"
-	sh "whoami"
-        sh "echo Hi"
-        sh "dpkg -l"
-	sh "chmod +x gradlew"
-	echo "permission given!"
-        sh "./gradlew --version"
+    stage('Build Project') {
+      try {
+        container('gradle') {
+            sh "pwd"
+            echo "Inside Gradle container!"
+            sh "whoami"
+            sh "chmod +x gradlew"
+            sh "./gradlew build -xtest"
+           // sh "./gradlew bootRun"
+           // """
+        }
+      }
+      catch (exc) {
+        println "Failed to test - ${currentBuild.fullDisplayName}"
+        throw(exc)
       }
     }
-	
-	stage('Dev code Checkout') {
-      git 'https://github.com/contactsai123/PACT-JVM-Example.git'
-      parallel (
-        buildrepo: {
-          container('gradle') {
-            stage('Build repo') {
-              sh "chmod +x gradlew"
-	      sh "./gradlew clean build -xtest"
-            }
-          }
-        },
-        testrepo: {
-          container('gradle') {
-            stage('Test repo') {
-                sh "chmod +x gradlew"
-		sh "./gradlew test"
-            }
-          }
+    stage('Contract Test') {
+      container('gradle') {
+      sh "chmod +x gradlew"
+      sh "./gradlew test pactPublish"
+      //sh "./gradlew pactVerify"
+      }
+    }
+    
+    stage('Create Docker image') {
+      container('docker') {
+          sh """
+            docker login -u 'contactsai123' -p 'p@ssword123'
+            docker build -t contactsai123/userms .
+            docker push contactsai123/userms
+            """
         }
-      )
-    }
-	
-    stage('Logs') {
-      containerLog('gradle')
-      containerLog('kubectl')
-    }
+      }
+
+    
   }
 }
