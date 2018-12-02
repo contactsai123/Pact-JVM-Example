@@ -13,7 +13,6 @@ buildscript {
     }
 }
 
-
 repositories {
 	mavenCentral()
 }
