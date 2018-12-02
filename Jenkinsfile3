@@ -80,7 +80,7 @@ volumes: [
     stage('Build Microservice Docker image') {
       container('docker') {
           sh """
-            docker login -u 'contactsai123' -p 'p@ssword123'
+            docker login -u 'username' -p 'password'
             docker images
             echo "print whoami??"
             sh "whoami"
