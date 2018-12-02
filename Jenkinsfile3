@@ -3,6 +3,8 @@
  * This pipeline executes Selenium tests against Chrome and Firefox, all running in the same Pod but in separate containers
  * and in parallel
  */
+ 
+ //Test github webhook
 
 def label = "maven-selenium-${UUID.randomUUID().toString()}"
 
