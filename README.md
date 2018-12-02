@@ -25,9 +25,11 @@ Clone the project in your local
 **2) How to run Consumers:**
 Build the project ./gradlew clean build -xtest
 
+
 **3) To create PACT files:**
 * Run the command ./gradlew test
 * Pact files can be viewed in 'pacts' directory
+
 
 **4) To publish PACT files to PACT broker:**
 * Run the command ./gradlew pactPublish
