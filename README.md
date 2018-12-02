@@ -14,7 +14,7 @@ Consumer B consumes only name and empid attributes
 
 salary attribute is not consumed by either Consumer A or Consumer B
 
-Clone the project in your local
+Clone the project in your local drive
 
 **1) How to run Provider:**
 * First build the project and download dependenices ./gradlew clean build -xtest
