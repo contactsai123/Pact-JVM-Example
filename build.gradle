@@ -1,4 +1,4 @@
-//build.gradle file
+//This is build.gradle file
 buildscript {
 	ext {
         springBootVersion = '1.5.9.RELEASE'    }
