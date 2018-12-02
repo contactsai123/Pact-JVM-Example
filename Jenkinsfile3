@@ -76,9 +76,6 @@ volumes: [
     stage('Build Microservice Docker image') {
       container('docker') {
           sh """
-            docker images
-            echo "Inside Build Stage"
-            sh "whoami"
             //Push to Docker hub registry
              // docker login -u 'username' -p 'password'
              // docker build -t contactsai123/userms .
