@@ -126,7 +126,7 @@ stage('Automation Test checkout') { // for display purposes
     }
         
     stage('Results') {
-        //junit '**/target/failsafe-reports/*.xml'
+    	echo "Build Successful!"
     }
 }
   }
