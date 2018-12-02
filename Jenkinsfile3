@@ -50,7 +50,7 @@ volumes: [
     }
     
     
-    stage('Build Project') {
+    stage('Build Microservice') {
       try {
         container('gradle') {
             sh "pwd"
@@ -73,7 +73,7 @@ volumes: [
     }
     
  
-    stage('Build Microservice Docker image') {
+    stage('Deploy Microservice Docker image') {
       container('docker') {
          // sh """
             // Push to Docker hub registry
@@ -89,7 +89,7 @@ stage('Automation Test checkout') { // for display purposes
         git 'https://github.com/BushnevYuri/e2e-automation-pipeline.git'
     parallel(
     Smoke:{
-    stage('Smoke') {
+    stage('Smoke Test') {
           container('maven') {
         try {
             sh "mvn clean verify -Dtags='type:Smoke'"
@@ -106,7 +106,7 @@ stage('Automation Test checkout') { // for display purposes
     }
     },
     API:{
-    stage('API') {
+    stage('API Test') {
           container('maven') {
         try {
             sh "mvn clean verify -Dtags='type:API'"
@@ -126,10 +126,7 @@ stage('Automation Test checkout') { // for display purposes
     }
         
     stage('Results') {
-        junit '**/target/failsafe-reports/*.xml'
-    }
-   stage('Deploy to Staging') {
-     echo "Deployment successful !"
+        //junit '**/target/failsafe-reports/*.xml'
     }
 }
   }
