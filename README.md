@@ -2,8 +2,7 @@
 
 Basic example of Consumer driven contract testing using Pact JVM broker and Gradle
 
-
-**Overview:**
+**Overview of the contract testing framework:**
 
 I have 1 provider called "UserService" in src/main and 2 consumers "Consumer A" and "Consumer B" in src/test
 
