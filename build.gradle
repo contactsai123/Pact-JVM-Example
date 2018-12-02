@@ -98,8 +98,9 @@ pact {
 			hasPactsFromPactBroker('https://sivasailem.pact.dius.com.au', authentication: ['Basic','ZVPfu3GzqtwqrNZTrcSTjEeTcbcgZen', 'gOFZjnwvNoHtZdzKW06UgX9yFA5Z7Qk'])
 				}
         }            
- 
-	//Publish reports		
+
+	
+   //Publish reports
 	reports {
       defaultReports() // adds the standard console output
       markdown // report in markdown format
