@@ -99,7 +99,8 @@ pact {
 				}
         }            
 
-  //PACT reports
+  
+  //Publish PACT report
    reports {
       defaultReports() // adds the standard console output
       markdown // report in markdown format
