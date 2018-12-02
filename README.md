@@ -1,4 +1,4 @@
-**Pact-JVM-Example**
+***Pact-JVM-Example***
 
 Basic example of Consumer driven contract testing using Pact JVM broker and Gradle
 
