@@ -75,12 +75,12 @@ volumes: [
  
     stage('Build Microservice Docker image') {
       container('docker') {
-          sh """
-            //Push to Docker hub registry
+         // sh """
+            // Push to Docker hub registry
              // docker login -u 'username' -p 'password'
              // docker build -t contactsai123/userms .
              // docker push contactsai123/userms
-            """
+            // """
         }
       }
  
