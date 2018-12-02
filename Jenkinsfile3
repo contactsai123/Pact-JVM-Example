@@ -1,11 +1,8 @@
-
 /**
- * This pipeline executes Selenium tests against Chrome and Firefox, all running in the same Pod but in separate containers
+ * This pipeline builds Microservice and runs smoke and API tests, running in the same Pod but in separate containers
  * and in parallel
  */
  
- //Test github webhook
-
 def label = "maven-selenium-${UUID.randomUUID().toString()}"
 
 podTemplate(label: label, yaml: """
@@ -48,7 +45,6 @@ volumes: [
      stage('Run kubectl') {
       container('kubectl') {
         echo "Inside kubectl user!"
-        sh "whoami"
         sh "kubectl get pods"
       }
     }
@@ -59,10 +55,8 @@ volumes: [
         container('gradle') {
             sh "pwd"
             echo "Inside Gradle container!"
-            sh "whoami"
             sh "chmod +x gradlew"
             sh "./gradlew build -xtest"
-           // sh "./gradlew bootRun"
             }
       }
       catch (exc) {
@@ -78,23 +72,21 @@ volumes: [
       }
     }
     
-    /*
+ 
     stage('Build Microservice Docker image') {
       container('docker') {
           sh """
-            docker login -u 'username' -p 'password'
             docker images
-            echo "print whoami??"
+            echo "Inside Build Stage"
             sh "whoami"
-            sudo docker build -t contactsai123/userms .
-            docker images
             //Push to Docker hub registry
-            sudo docker push contactsai123/userms
-            sudo docker run -p 8111:8111 contactsai123/userms
+             // docker login -u 'username' -p 'password'
+             // docker build -t contactsai123/userms .
+             // docker push contactsai123/userms
             """
         }
       }
-  */
+ 
   
 stage('Automation Test checkout') { // for display purposes
         git 'https://github.com/BushnevYuri/e2e-automation-pipeline.git'
@@ -135,24 +127,7 @@ stage('Automation Test checkout') { // for display purposes
     }
     )
     }
-    
-    /* stage('UI') {
-        container('maven') {
-        try {
-            sh "mvn clean verify -Dtags='type:UI'"
-        } catch (err) {
-
-        } finally {
-            publishHTML (target: [
-                    reportDir: 'target/site/serenity',
-                    reportFiles: 'index.html',
-                    reportName: "UI_tests_report"
-            ])
-        }
-    }
-    }
-     */
-     
+        
     stage('Results') {
         junit '**/target/failsafe-reports/*.xml'
     }
