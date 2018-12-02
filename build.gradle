@@ -17,6 +17,7 @@ repositories {
 	mavenCentral()
 }
 
+//Apply plugins
 apply plugin: 'java'
 apply plugin: 'maven'
 apply plugin: 'eclipse'
