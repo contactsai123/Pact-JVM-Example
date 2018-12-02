@@ -1,4 +1,4 @@
-//build.gradle
+//build.gradle file
 buildscript {
 	ext {
         springBootVersion = '1.5.9.RELEASE'    }
@@ -9,8 +9,7 @@ buildscript {
        classpath 'au.com.dius:pact-jvm-provider-gradle_2.12:3.5.22'
 	   classpath('se.transmode.gradle:gradle-docker:1.2')
 	   classpath(
-          "org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
-		
+          "org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")	
     }
 }
 
@@ -71,7 +70,6 @@ task buildDocker(type: Docker, dependsOn: build) {
   }
   
 pact {
-	
 	//Run pactPublish task IF you need to publish the Pact files to the broker. Provide the pactUrl, pactUser, pactPassword in Gradle.properties file
 	publish {
 	version = "2.0.1"
