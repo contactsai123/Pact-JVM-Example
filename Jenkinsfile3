@@ -42,12 +42,12 @@ volumes: [
     def previousGitCommit = sh(script: "git rev-parse ${gitCommit}~", returnStdout: true)
     sh "whoami"
  
-     stage('Run kubectl') {
-      container('kubectl') {
-        echo "Inside kubectl user!"
-        sh "kubectl get pods"
-      }
-    }
+     //stage('Run kubectl') {
+      //container('kubectl') {
+        //echo "Inside kubectl user!"
+        //sh "kubectl get pods"
+      //}
+    //}
     
     
     stage('Build Microservice') {
