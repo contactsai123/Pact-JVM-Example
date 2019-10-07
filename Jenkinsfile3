@@ -33,7 +33,7 @@ volumes: [
 ] ) {
 
  // node(label) {
-  
+  node {
   
     def myRepo = checkout scm
     def gitCommit = myRepo.GIT_COMMIT
@@ -129,4 +129,4 @@ stage('Automation Test checkout') { // for display purposes
     	echo "Build Successful!"
     }
 }
- // }
+  }
