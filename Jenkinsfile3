@@ -32,7 +32,7 @@ volumes: [
   hostPathVolume(mountPath: '/var/run/docker.sock', hostPath: '/var/run/docker.sock')
 ] ) {
 
-  node(label) {
+ // node(label) {
   
   
     def myRepo = checkout scm
@@ -129,4 +129,4 @@ stage('Automation Test checkout') { // for display purposes
     	echo "Build Successful!"
     }
 }
-  }
+ // }
