@@ -1,0 +1,11 @@
+Master:
+  ImageTag: lts-alpine
+  ServiceType: LoadBalancer
+  InstallPlugins:
+    - kubernetes:latest
+    - kubernetes-credentials:latest
+    - workflow-aggregator:latest
+    - workflow-job:latest
+    - credentials-binding:latest
+    - git:latest
+    - blueocean: latest
