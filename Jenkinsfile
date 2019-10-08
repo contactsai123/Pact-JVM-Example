@@ -54,7 +54,7 @@ volumes: [
     stage('Create Docker image') {
       container('docker') {
           sh """
-            docker login -u 'contactsai123' -p 'p@ssword123'
+            docker login -u 'contactsai123' -p 'xxxx'
             docker build -t contactsai123/userms .
             docker push contactsai123/userms
             """
