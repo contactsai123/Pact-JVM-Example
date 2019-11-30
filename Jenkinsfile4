@@ -92,7 +92,18 @@ volumes: [
      // git 'https://github.com/contactsai123/Pact-JVM-Example.git'
       //cd docker-jmeter
       container('jmeter') {
-      sh "jmeter -n -t sample.jmx"
+     
+      try {
+             sh "jmeter -n -t sample.jmx -l testresult.jtl -e -o index.html"
+        } catch (err) {
+
+        } finally {
+            publishHTML (target: [
+                    reportDir: '',
+                    reportFiles: 'index.html',
+                    reportName: "Performance_test_report"
+            ])
+        }
       }
     }
  
@@ -111,7 +122,7 @@ stage('Automation Test checkout') { // for display purposes
             publishHTML (target: [
                     reportDir: 'target/site/serenity',
                     reportFiles: 'index.html',
-                    reportName: "Smoke_tests_report"
+                    reportName: "Smoke_test_report"
             ])
         }
     }
@@ -128,7 +139,7 @@ stage('Automation Test checkout') { // for display purposes
             publishHTML (target: [
                     reportDir: 'target/site/serenity',
                     reportFiles: 'index.html',
-                    reportName: "API_tests_report"
+                    reportName: "API_test_report"
             ])
         }
     }
