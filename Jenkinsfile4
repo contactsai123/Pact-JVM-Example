@@ -72,7 +72,7 @@ volumes: [
       container('gradle') {
       sh "chmod +x gradlew"
       sh "./gradlew test pactPublish"
-      //sh "./gradlew pactVerify"
+      sh "./gradlew pactVerify"
       }
     }
     
