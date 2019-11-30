@@ -89,10 +89,10 @@ volumes: [
       }
       
     stage('Performance Test') {
-      git 'https://github.com/justb4/docker-jmeter.git'
+      git 'https://github.com/contactsai123/Pact-JVM-Example.git'
       cd docker-jmeter
       container('jmeter') {
-      sh "./test.sh"
+      sh "jmeter -n -t sample.jmx"
       }
     }
  
