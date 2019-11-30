@@ -1,38 +1,144 @@
-pipeline {
-  agent {
-    kubernetes {
-      defaultContainer 'jnlp'
-      yaml """
+/**
+ * This pipeline builds Microservice and runs smoke and API tests, running in the same Pod but in separate containers
+ * and in parallel
+ */
+ 
+def label = "maven-selenium-${UUID.randomUUID().toString()}"
+
+podTemplate(label: label, yaml: """
 apiVersion: v1
 kind: Pod
-metadata:
-  labels:
-    some-label: some-label-value
 spec:
   containers:
+  - name: gradle
+    image: keeganwitt/docker-gradle-root
+    command: ['cat']
+    tty: true
   - name: maven
-    image: maven:alpine
-    command:
-    - cat
+    image: zenika/alpine-maven
+    command: ['cat']
     tty: true
-  - name: busybox
-    image: busybox
-    command:
-    - cat
+  - name: docker
+    image: docker
+    command: ['cat']
     tty: true
-"""
-    }
-  }
-  stages {
-    stage('Run maven') {
-      steps {
-        container('maven') {
-          sh 'mvn -version'
-        }
-        container('busybox') {
-          sh '/bin/busybox'
-        }
+  - name: kubectl
+    image: lachlanevenson/k8s-kubectl:v1.8.8
+    command: ['cat']
+    tty: true
+  - name: jmeter
+    image: justb4/jmeter
+    command: ['cat']
+    tty: true
+""",
+volumes: [
+  hostPathVolume(mountPath: '/home/gradle/.gradle', hostPath: '/tmp/jenkins/.gradle'),
+  hostPathVolume(mountPath: '/var/run/docker.sock', hostPath: '/var/run/docker.sock')
+] ) {
+
+ node(label) {
+ 
+  
+    def myRepo = checkout scm
+    def gitCommit = myRepo.GIT_COMMIT
+    def gitBranch = myRepo.GIT_BRANCH
+    def shortGitCommit = "${gitCommit[0..10]}"
+    def previousGitCommit = sh(script: "git rev-parse ${gitCommit}~", returnStdout: true)
+    sh "whoami"
+ 
+     //stage('Run kubectl') {
+      //container('kubectl') {
+        //echo "Inside kubectl user!"
+        //sh "kubectl get pods"
+      //}
+    //}
+    
+    
+    stage('Build Microservice') {
+      try {
+        container('gradle') {
+            sh "pwd"
+            echo "Inside Gradle container!"
+            sh "chmod +x gradlew"
+            sh "./gradlew build -xtest"
+            }
+      }
+      catch (exc) {
+        println "Failed to test - ${currentBuild.fullDisplayName}"
+        throw(exc)
       }
     }
-  }
+    stage('Contract Test') {
+      container('gradle') {
+      sh "chmod +x gradlew"
+      sh "./gradlew test pactPublish"
+      //sh "./gradlew pactVerify"
+      }
+    }
+    
+ 
+    stage('Deploy Microservice Docker image') {
+      container('docker') {
+         // sh """
+            // Push to Docker hub registry
+             // docker login -u 'username' -p 'password'
+             // docker build -t contactsai123/userms .
+             // docker push contactsai123/userms
+            // """
+        }
+      }
+      
+    stage('Performance Test') {
+      git 'https://github.com/justb4/docker-jmeter.git'
+      cd docker-jmeter
+      container('jmeter') {
+      sh "./test.sh"
+      }
+    }
+ 
+  
+stage('Automation Test checkout') { // for display purposes
+        git 'https://github.com/BushnevYuri/e2e-automation-pipeline.git'
+    parallel(
+    Smoke:{
+    stage('Smoke Test') {
+          container('maven') {
+        try {
+            sh "mvn clean verify -Dtags='type:Smoke'"
+        } catch (err) {
+
+        } finally {
+            publishHTML (target: [
+                    reportDir: 'target/site/serenity',
+                    reportFiles: 'index.html',
+                    reportName: "Smoke_tests_report"
+            ])
+        }
+    }
+    }
+    },
+    API:{
+    stage('API Test') {
+          container('maven') {
+        try {
+            sh "mvn clean verify -Dtags='type:API'"
+        } catch (err) {
+
+        } finally {
+            publishHTML (target: [
+                    reportDir: 'target/site/serenity',
+                    reportFiles: 'index.html',
+                    reportName: "API_tests_report"
+            ])
+        }
+    }
+    }
+    }
+    )
+    }
+        
+    stage('Results') {
+    	echo "Build Successful!"
+    }
 }
+  }
