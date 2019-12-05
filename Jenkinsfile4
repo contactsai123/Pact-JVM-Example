@@ -1,6 +1,6 @@
 /**
- * This pipeline builds Microservice and runs Contract, Performance, Smoke and API tests, running in the same Pod but in separate containers
- * and in parallel
+ * This pipeline builds Microservice, deploys in k8s cluster and runs Contract, Performance, Smoke and API test in Jenkins. It runsin the same Pod but 
+  * in separate containers and in parallel
  */
  
 def label = "maven-selenium-${UUID.randomUUID().toString()}"
