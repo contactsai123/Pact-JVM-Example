@@ -1,5 +1,5 @@
 /**
- * This pipeline builds Microservice and runs smoke and API tests, running in the same Pod but in separate containers
+ * This pipeline builds Microservice and runs Contract, Performance, Smoke and API tests, running in the same Pod but in separate containers
  * and in parallel
  */
  
