@@ -1,7 +1,6 @@
 /**
  * This pipeline builds Microservice, deploys in k8s cluster and runs Contract, Performance, Smoke and API test in Jenkins. It runs in the same Pod but 
   * in separate containers and in parallel
-  * Added comments
  */
  
 def label = "maven-selenium-${UUID.randomUUID().toString()}"
@@ -71,7 +70,7 @@ volumes: [
     }
     
  
-    stage('Deploy Microservice container in Kubernetes') {
+    stage('Deploy Microservice container') {
       container('docker') {
          // sh """
             // Push to Docker hub registry
