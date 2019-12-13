@@ -1,3 +1,4 @@
+// Trigger Microservices pipeline based on code commit
 package com.pact.producer;
 
 public class UsrInfo {
